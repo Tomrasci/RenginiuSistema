@@ -1,0 +1,47 @@
+﻿@model RenginiuSistema.ViewModels.TaskOrganisersViewModel
+
+@{
+    ViewBag.Title = "TaskOrganiserView";
+}
+
+@{
+    ViewBag.Title = "View";
+}
+
+<h2>TaskOrganiserView</h2>
+
+@if (!@Html.ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger" role="alert">
+        @Html.ValidationSummary()
+    </div>
+}
+
+@using (Html.BeginForm("AssignOrganiser", "Tasks"))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>OrgTask</h4>
+
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Task.Name)
+    @Html.HiddenFor(model => model.Task.Description)
+    @Html.HiddenFor(model => model.Task.Id)
+    @Html.HiddenFor(model => model.Task.Event_Id)
+    @Html.HiddenFor(model => model.Task.DateCreated)
+
+    @*@Html.DropDownListFor(
+        x => x.SelectedOrganiserId,
+        new SelectList(Model.Organisers, "Value", "Text"))*@
+    @Html.DropDownListFor(m => m.SelectedOrganiserId, Model.Organisers.Select(p => new SelectListItem { Value = p.Id.ToString(), Text = p.Email}), "Select Organiser")
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Assign" class="btn btn-primary" />
+        </div>
+    </div>
+</div>
+}

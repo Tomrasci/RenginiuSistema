@@ -1,0 +1,106 @@
+﻿@model RenginiuSistema.ViewModels.PDFViewModel
+@{
+    ViewBag.Title = "PDFView";
+}
+
+<link href="@Server.MapPath("~/lib/twitter-bootstrap/css/bootstrap.min.css")" rel="stylesheet" />
+
+<br />
+
+<h2>Report</h2>
+
+<br />
+
+@if (@Model.tickets.Count != 0)
+{
+    <div>
+        Tickets
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Code</th>
+            <th scope="col">Price</th>
+            <th scope="col">Date created</th>
+        </tr>
+        </thead>
+        @foreach (var ticket in Model.tickets)
+        {
+            <tbody>
+            <tr>
+                <td>@ticket.Code</td>
+                <td>@ticket.Price</td>
+                <td>@ticket.DateCreated</td>
+            </tr>
+            </tbody>
+        }
+    </table>
+
+    <div>
+        Orders
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Client</th>
+            <th scope="col">Ticket</th>
+            <th scope="col">Date created</th>
+        </tr>
+        </thead>
+        @foreach (var order in Model.orders)
+        {
+            <tbody>
+            <tr>
+                <td>@order.Client.Email</td>
+                <td>@order.Ticket.Code</td>
+                <td>@order.DateCreated</td>
+            </tr>
+            </tbody>
+        }
+    </table>
+
+    <div>
+        Clients list
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Email </th>
+        </tr>
+        </thead>
+        @foreach (var user in Model.users)
+        {
+            <tbody>
+            <tr>
+                <td>@user.Email</td>
+            </tr>
+            </tbody>
+        }
+    </table>
+}
+
+@if (@Model.TicketsAndFinanceFilter == true)
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Property</th>
+            <th scope="col">Value</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Finished orders</td>
+            <td>@Model.FinishedOrdersCount</td>
+        </tr>
+        <tr>
+            <td>Total paid sum</td>
+            <td>@Model.TotalPaidSum</td>
+        </tr>
+        <tr>
+            <td>Unfulfilled tickets</td>
+            <td>@Model.UnfulfilledTickets</td>
+        </tr>
+        </tbody>
+    </table>
+}

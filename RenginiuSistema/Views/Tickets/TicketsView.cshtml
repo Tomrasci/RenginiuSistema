@@ -1,0 +1,46 @@
+﻿@model RenginiuSistema.ViewModels.TicketsViewModel
+
+@{
+    ViewBag.Title = "TicketsView";
+}
+
+<br />
+
+<h2>Tickets</h2>
+
+<br />
+
+<button class="btn btn-primary" onclick="SelectTicketPurchase(@Model.Event.Id)">Purchase</button>
+
+<br />
+
+@foreach (var item in @Model.Tickets)
+{
+    <div class="card" style="margin-top: 16px">
+        <div class="card-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h5 class="card-title">Ticket</h5>
+                        <p>Code @item.Code</p>
+                    </div>
+                    <div class="col-md-4 float-right">
+                        <div class="btn-group float-right">
+                            <a onclick="SelectDesiredTicket(@item.Id)" class="btn btn-primary">View</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    function SelectTicketPurchase(eventId) {
+        location.href = "/Tickets/" + eventId + "/Purchase";
+    }
+
+    function SelectDesiredTicket(ticketId) {
+        location.href = "/Ticket/" + ticketId;
+    }
+</script>

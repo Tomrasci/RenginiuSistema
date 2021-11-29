@@ -1,0 +1,50 @@
+﻿@using RenginiuSistema.Helpers
+@using RenginiuSistema.Models
+@model RenginiuSistema.Models.OrgTask
+
+@{
+    ViewBag.Title = "View";
+}
+
+<h2>TaskStateView</h2>
+
+@if (!@Html.ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger" role="alert">
+        @Html.ValidationSummary()
+    </div>
+}
+
+@using (Html.BeginForm("UpdateTaskState", "Tasks"))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>OrgTask</h4>
+
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Name)
+    @Html.HiddenFor(model => model.Description)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Event_Id)
+    @*<div class="form-group">
+        <label>Current Task State:</label>
+        @{
+            var description = EnumHelper<TaskState>.GetDisplayValue(@Model.State);
+            @Html.DisplayFor(e => description);
+        }
+    </div>*@
+    @Html.EnumDropDownListFor(
+        x => x.State,
+        "Select task state",
+        new { @class = "form-control" })
+
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </div>
+</div>
+}

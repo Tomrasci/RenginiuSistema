@@ -1,0 +1,54 @@
+﻿@using RenginiuSistema.Models
+@using RenginiuSistema.ViewModels
+@model RenginiuSistema.ViewModels.DataEntryViewModel
+
+@{
+    ViewBag.Title = "DataEntryView";
+}
+
+<br />
+
+<h2>Purchase Ticket</h2>
+
+<br />
+
+@if (!@Html.ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger" role="alert">
+        @Html.ValidationSummary()
+    </div>
+}
+
+@if (@Model.Error)
+{
+    <div class="alert alert-danger" role="alert">
+        @Model.Message
+    </div>
+}
+else if (!@Model.Message.IsEmpty())
+{
+    <div class="alert" role="alert">
+        @Model.Message
+    </div>
+}
+
+
+
+@using (@Html.BeginForm("SubmitPurchaseData", "Tickets"))
+{
+    <div hidden>
+        @Html.EditorFor(m => m.Event)
+        @Html.EditorFor(m => m.Ticket)
+    </div>
+
+    @Html.LabelFor(m => m.PaymentMethod)
+    @Html.DropDownList("PaymentMethod",
+        EnumHelper.GetSelectList(typeof(PaymentMethod)),
+        "Select payment method",
+        new { @class = "form-control" })
+
+    <br />
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+}
+

@@ -1,0 +1,119 @@
+﻿@model List<RenginiuSistema.Models.Event>
+@{
+    ViewBag.Title = "EventsView";
+}
+
+<br />
+
+<h2>Events</h2>
+
+<br />
+
+<a onclick="SelectNewEventCreation()" class="btn btn-primary">Add event</a>
+
+@foreach (var item in Model)
+{
+    <div class="card" style="margin-top: 16px">
+        <div class="card-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-7">
+                        <h5 class="card-title">@item.Name</h5>
+                        <p class="card-text">@item.Date.ToString("dd MMM yyyy")</p>
+                    </div>
+                    <div class="col-md-5 float-right">
+                        <div class="btn-group">
+                            <a onclick="SelectEventEdit(@item.Id)" class="btn btn-light">Edit</a>
+                            <a onclick="OpenRemovalModal(@item.Id)" class="btn btn-danger">Remove</a>
+                            <a onclick="SelectEvent(@item.Id)" class="btn btn-primary">View details</a>
+                        </div>
+
+                        <a onclick="SelectTasksView(@item.Id)" class="btn btn-light">
+                            Tasks
+                        </a>
+
+                        <a onclick="SelectTicketsView(@item.Id)" class="btn btn-light">Tickets</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="removeModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Modal body text goes here.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-opt="remove">Remove</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" data-opt="cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<script>
+    function SelectEventEdit(id) {
+        location.href = "/Events/Edit/" + id;
+    }
+
+    function SelectRemoval(id) {
+        $.ajax({
+            type: "POST",
+            url: "/Events/Remove",
+            data: { id: id },
+            success: function (data, textStatus) {
+                if (data) {
+                    document.open();
+                    document.write(data);
+                    document.close();
+                }
+            }
+        });
+    }
+
+    function SelectNewEventCreation() {
+        location.href="/Events/New";
+    }
+
+    function SelectEvent(id) {
+        location.href = "/Events/" + id;
+    }
+
+    function SelectTasksView(id) {
+        location.href = "/Events/" + id + "/Tasks";
+    }
+
+    function OpenRemovalModal(id) {
+        $(".modal-footer .btn").attr('data-id', id);
+        $('#removeModal').modal();
+    }
+
+    $(".modal-footer .btn").click(function () {
+        CheckRemovalConfirmation($(this).data('opt'), $(this).data('id'));
+    });
+
+    function CheckRemovalConfirmation(opt, id) {
+        if (opt === "remove") {
+            SelectRemoval(id);
+        }
+    }
+
+    function SelectTicketsView(eventId)
+    {
+        location.href = "/Tickets/" + eventId;
+    }
+</script>
+
+
+

@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "MainView";
+}
+
+<br />
+
+<h2>Main Vieww</h2>
+
+<br />
+
+<a onclick="SelectEventsView()" class="btn btn-primary">Open Events</a>
+<a onclick="SelectOrganisersView()" class="btn btn-primary">Open Organisers</a>
+
+
+<script>
+    function SelectEventsView() {
+        location.href = "/Events";
+    }
+</script>
+
+<script>
+    function SelectOrganisersView() {
+        location.href = "/Organisers";
+    }
+</script>
+

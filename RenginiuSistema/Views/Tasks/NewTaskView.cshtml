@@ -1,0 +1,54 @@
+﻿@using RenginiuSistema.Models
+@model RenginiuSistema.Models.OrgTask
+
+@{
+    ViewBag.Title = "NewTaskView";
+}
+
+<h2>NewTaskView</h2>
+
+
+@if (!@Html.ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger" role="alert">
+        @Html.ValidationSummary()
+    </div>
+}
+@using (Html.BeginForm("CreateTask", "Tasks"))
+{
+
+    <div class="form-horizontal">
+        <h4>OrgTask</h4>
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Deadline, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Deadline, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+            </div>
+        </div>
+        @Html.HiddenFor(model=> model.Event.Id)
+        @Html.HiddenFor(model=> model.Event.Name)
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+}
+

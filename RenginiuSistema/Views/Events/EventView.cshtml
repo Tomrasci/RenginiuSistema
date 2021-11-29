@@ -1,0 +1,95 @@
+﻿@model RenginiuSistema.Models.Event
+@{
+    ViewBag.Title = "EventView";
+}
+
+<br />
+<h2>Event details</h2>
+<br />
+<a onclick="SelectApplyOldTaskSet(@Model.Id)" class="btn btn-primary">ApplyOldTaskSet</a>
+<a onclick="SelectReportGeneration(@Model.Id)" class="btn btn-primary">Generate Report</a>
+<br />
+<ul class="list-group">
+    <div class="list-group-item flex-column align-items-start">
+        <h5 class="mb-1">@Model.Name</h5>
+        <p class="mb-1">@Model.Description</p>
+    </div>
+    <li class="list-group-item">
+        <div style="display: flex;">
+            <span class="material-icons" style="margin-right: .75rem">event</span> @Model.Date.ToString("dd MMM yyyy")
+        </div>
+    </li>
+</ul>
+
+<br />
+<h3>More information</h3>
+<br />
+
+
+
+<ul class="list-group">
+    <li class="list-group-item">
+        <div class="row no-gutters">
+            <div class="col-md-3">
+                @Html.DisplayNameFor(x => x.Address)
+            </div>
+            <div class="col-md-9">
+                @Model.Address
+            </div>
+        </div>
+    </li>
+
+    <li class="list-group-item">
+        <div class="row no-gutters">
+            <div class="col-md-3">
+                @Html.DisplayNameFor(x => x.Setting)
+            </div>
+            <div class="col-md-9">
+                @Model.Setting
+            </div>
+        </div>
+    </li>
+
+    <li class="list-group-item">
+        <div class="row no-gutters">
+            <div class="col-md-3">
+                @Html.DisplayNameFor(x => x.Size)
+            </div>
+            <div class="col-md-9">
+                @Model.Size
+            </div>
+        </div>
+    </li>
+
+    <li class="list-group-item">
+        <div class="row no-gutters">
+            <div class="col-md-3">
+                @Html.DisplayNameFor(x => x.Budget)
+            </div>
+            <div class="col-md-9">
+                EUR @Model.Budget
+            </div>
+        </div>
+    </li>
+
+    <li class="list-group-item">
+        <div class="row no-gutters">
+            <div class="col-md-3">
+                @Html.DisplayNameFor(x => x.ContactNumber)
+            </div>
+            <div class="col-md-9">
+                @Model.ContactNumber
+            </div>
+        </div>
+    </li>
+</ul>
+
+<script>
+    function SelectApplyOldTaskSet(eventId) {
+        location.href = "/Events/" + eventId + "/ApplyTaskSet";
+    }
+
+    function SelectReportGeneration(eventId) {
+        location.href = "/Events/" + eventId + "/Report";
+    }
+</script>

@@ -1,0 +1,89 @@
+﻿@using RenginiuSistema.Helpers
+@using RenginiuSistema.Models
+
+@{
+    ViewBag.Title = "EventOrganiserView";
+}
+
+<h2>Event Organisers</h2>
+
+
+<a onclick="SelectCreateEventOrganiser()" class="btn btn-primary">Add new event organiser</a>
+
+@foreach (var item in Model)
+{
+    <div class="card" style="margin-top: 16px">
+        <div class="card-body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-7">
+                        <h5 class="card-title">@item.Email</h5>
+                    </div>
+                    <div class="col-md-5 float-right">
+                        <div class="btn-group">
+                            <a onclick="OpenRemovalModal(@item.Id)" class="btn btn-danger">Remove</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="removeModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete this organiser?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-opt="remove">Remove</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" data-opt="cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+<script>
+    function SelectCreateEventOrganiser() {
+        location.href = "/Organisers/NewEventOrganiserView";
+    }
+
+    function SelectRemoveEventOrganiser(id) {
+        $.ajax({
+            type: "POST",
+            url: "/Organisers/Remove",
+            data: { id: id },
+            success: function (data, textStatus) {
+                if (data) {
+                    document.open();
+                    document.write(data);
+                    document.close();
+                }
+            }
+        });
+    }
+    function OpenRemovalModal(id) {
+        $(".modal-footer .btn").attr('data-id', id);
+        $('#removeModal').modal();
+    }
+
+    $(".modal-footer .btn").click(function () {
+        CheckRemovalConfirmation($(this).data('opt'), $(this).data('id'));
+    });
+
+    function CheckRemovalConfirmation(opt, id) {
+        if (opt === "remove") {
+            SelectRemoveEventOrganiser(id);
+        }
+    }
+
+</script>

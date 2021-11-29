@@ -1,0 +1,41 @@
+﻿@model RenginiuSistema.ViewModels.ReportGenViewModel
+
+@{
+    ViewBag.Title = "ReportGenView";
+}
+
+<h2>Generate report</h2>
+
+<br />
+
+@if (!@Html.ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger" role="alert">
+        @Html.ValidationSummary()
+    </div>
+}
+
+@using (@Html.BeginForm("CreateReport", "Reports"))
+{
+    <div hidden>
+        @Html.TextBoxFor(m => m.EventId)
+    </div>
+
+    <input type="text" name="eventId" value="@Model.EventId" hidden />
+
+    <div class="form-check">
+        @Html.LabelFor(m => m.UsersFilter)
+        @Html.CheckBoxFor(m => m.UsersFilter, false)
+    </div>
+    <div class="form-check">
+        @Html.LabelFor(m => m.TicketsAndFinanceFilter)
+        @Html.CheckBoxFor(m => m.TicketsAndFinanceFilter, false)
+    </div>
+
+    <br />
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+}
+
+
+

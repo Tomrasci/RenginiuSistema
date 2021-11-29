@@ -1,0 +1,30 @@
+﻿@model RenginiuSistema.Models.Ticket
+@{
+    ViewBag.Title = "TicketView";
+}
+
+<br />
+
+<h2>Ticket</h2>
+
+<br />
+
+<table class="table">
+    <tbody>
+    <tr>
+        <th scope="row">Kodas</th>
+        <td>@Model.Code</td>
+    </tr>
+    <tr>
+        <th scope="row">Kaina</th>
+        <td>@Model.Price</td>
+    </tr>
+    <tr>
+        <th scope="row">Sukūrimo data</th>
+        <td>@Model.DateCreated</td>
+    </tr>
+    </tbody>
+</table>
+
+
+

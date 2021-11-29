@@ -1,0 +1,139 @@
+﻿@using RenginiuSistema.Helpers
+@using RenginiuSistema.Models
+@model RenginiuSistema.ViewModels.TasksViewModel
+@{
+    ViewBag.Title = "TasksView";
+}
+
+<h2>Tasks</h2>
+<a onclick="SelectCreateTask(@Model.Event.Id)" class="btn btn-primary">Add new task</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">State</th>
+            <th scope="col">Assignee</th>
+            <th scope="col">Created on</th>
+            <th scope="col">Deadline</th>
+            <th scope="col">Completed on</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in @Model.Tasks)
+    {
+        <tr>
+            <th scope="row">@item.Name</th>
+            <td>@item.Description</td>
+            <td>
+                @{
+                    var description = EnumHelper<TaskState>.GetDisplayValue(@item.State);
+                    @Html.DisplayFor(e => description);
+                }
+            </td>
+            @if (item.Organiser != null)
+            {
+                <td>@item.Organiser.Email</td>
+            }
+            else
+            {
+                <td></td>
+            }
+            <td>@item.DateCreated.ToString("dd MMM yyyy")</td>
+            <td>
+                @if (@item.Deadline != null)
+                {
+                    @item.Deadline.Value.ToString("dd MMM yyyy");
+                }
+            </td>
+            <td>
+                @if (@item.DateCompleted != null)
+                {
+                    @item.DateCompleted.Value.ToString("dd MMM yyyy");
+                }
+            </td>
+            <td>
+                <div class="float-right">
+                    <div class="btn-group">
+                        <button class="btn btn-light" onclick="SelectEditTask(@item.Id, @item.Event_Id)" data-task-id="@item.Id">
+                            <i class="material-icons">edit</i>
+                        </button>
+                        <button class="btn btn-light" onclick="OpenRemovalModal(@item.Id, @item.Event_Id)" data-task-id="@item.Id">
+                            <i class="material-icons">delete</i>
+                        </button>
+                    </div>
+                    <button class="btn btn-light" onclick="SelectChangeTaskState(@item.Id, @item.Event_Id) "data-task-id="@item.Id">Change State</button>
+                    <button class="btn btn-light" onclick="SelectCreateEventOrganiser(@item.Id, @item.Event_Id)" data-task-id="@item.Id">Assign</button>
+                </div>
+            </td>
+        </tr>    
+
+    }
+    </tbody>
+</table>
+<div class="modal fade" id="removeModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this task?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-opt="remove">Remove</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" data-opt="cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function SelectCreateTask(eventId) {
+        location.href="/Tasks/" + eventId +"/New";
+    }
+    function SelectEditTask(taskId, eventId) {
+        location.href =  "/Tasks/" + eventId +"/Edit/" + taskId;
+    }
+    function SelectRemoveTask(id) {
+        $.ajax({
+            type: "POST",
+            url: "/Tasks/Remove",
+            data: { id: id},
+            success: function(data, textStatus) {
+                if (data) {
+                    document.open();
+                    document.write(data);
+                    document.close();
+                }
+            }
+
+        });
+    }
+    function OpenRemovalModal(id, eventId) {
+        $(".modal-footer .btn").attr('data-id', id, eventId);
+        $('#removeModal').modal();
+    }
+
+    $(".modal-footer .btn").click(function () {
+        CheckRemovalConfirmation($(this).data('opt'), $(this).data('id'), $(this).data('eventId'));
+    });
+
+    function CheckRemovalConfirmation(opt, id, eventId) {
+        if (opt === "remove") {
+            SelectRemoveTask(id, eventId);
+        }
+    }
+
+    function SelectChangeTaskState(taskId, eventId) {
+        location.href =  "/Tasks/" + eventId +"/ChangeState/" + taskId;
+    }
+
+    function SelectCreateEventOrganiser(taskId, eventId) {
+        location.href = "/Tasks/" + eventId+ "/Organiser/" + taskId;
+    }
+
+</script>

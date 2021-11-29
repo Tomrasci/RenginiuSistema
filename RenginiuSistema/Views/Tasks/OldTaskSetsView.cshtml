@@ -1,0 +1,82 @@
+﻿@model RenginiuSistema.ViewModels.TaskSetViewModel
+
+@{
+    ViewBag.Title = "Old Events Task Sets";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    if(@Model.SuccessMessage != "")
+    {
+        <h2>@Model.SuccessMessage</h2>
+    }
+    <div class="form-horizontal">
+
+        @Html.HiddenFor(model=>model.CurrentEvent.Id)
+        @Html.HiddenFor(model=>model.CurrentEvent.Name)
+        <table>
+            @foreach (var item in @Model.Events)
+            {
+                <div>@item.Name</div>
+                <a onclick="SelectApplyOldTaskSet(@item.Id, @Model.CurrentEvent.Id)" class="btn btn-primary">ApplyOldTaskSet</a>
+                <table class="table" style="width:1000px">
+                    <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">State</th>
+                        <th scope="col">Assignee</th>
+                        <th scope="col">Created on</th>
+                        <th scope="col">Deadline</th>
+                        <th scope="col">Completed on</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                @foreach (var task in item.Tasks)
+                {
+                    <tbody>
+
+                    <tr>
+                        <th scope="row">@task.Name</th>
+                        <td>@task.Description</td>
+                        <td>@task.State</td>
+                        @if (task.Organiser != null)
+                        {
+                            <td>@task.Organiser.Email</td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                        <td>@task.DateCreated.ToString("dd MMM yyyy")}</td>
+                        <td>@if (@task.Deadline != null)
+                            {
+                                @task.Deadline.Value.ToString("dd MMM yyyy");
+                            }</td>
+                        <td>   @if (@task.DateCompleted != null)
+                               {
+                                   @task.DateCompleted.Value.ToString("dd MMM yyyy");
+                               }</td>
+                    </tr>
+
+                    </tbody>
+                }
+                    </table>
+                        
+            }
+        </table>
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Create" class="btn btn-default"/>
+        </div>
+    </div>
+}
+
+<script>
+    function SelectApplyOldTaskSet(eventId, currentId) {
+        location.href = "/Events/" + currentId + "/ApplyTaskSet/" + eventId;
+    }
+</script>
